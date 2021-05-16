@@ -10,3 +10,17 @@ func StringInSlice(val string, inSlice []string) (b bool) {
 	}
 	return false
 }
+
+// SliceDifference will compare 2 slices and return the difference
+func SliceDifference(source, dest []string) (diff []string) {
+	mb := make(map[string]struct{}, len(dest))
+	for _, x := range dest {
+		mb[x] = struct{}{}
+	}
+	for _, x := range source {
+		if _, found := mb[x]; !found {
+			diff = append(diff, x)
+		}
+	}
+	return
+}
