@@ -57,3 +57,42 @@ func TestSliceDifference(t *testing.T) {
 		assert.Equal(tc.expected, z)
 	}
 }
+
+func TestConvertMapStringInterfaceToMapStringString(t *testing.T) {
+	assert := assert.New(t)
+
+	tests := []struct {
+		value map[string]interface{}
+		err   bool
+	}{
+		{
+			value: map[string]interface{}{
+				"a": "b",
+			},
+			err: false,
+		},
+		{
+			value: map[string]interface{}{
+				"bacon": "delicious",
+				"eggs": struct {
+					source string
+					price  float64
+				}{
+					source: "chicken",
+					price:  1.75,
+				},
+				"steak": true,
+			},
+			err: true,
+		},
+	}
+
+	for _, tc := range tests {
+		_, err := ConvertMapStringInterfaceToMapStringString(tc.value)
+		if tc.err {
+			assert.Error(err)
+		} else {
+			assert.NoError(err)
+		}
+	}
+}
